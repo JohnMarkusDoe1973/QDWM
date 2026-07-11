@@ -327,14 +327,7 @@ int main(void)
 	setup_volume_listener();
 	update_volume();
 	bar_unclean = 1;
-	bar = XCreateSimpleWindow(
-		dpy, root,
-		0, 0,
-		DisplayWidth(dpy, screen), bar_height,
-							  0,
-						   barbg,
-						   barbg
-	);
+	bar = XCreateSimpleWindow(dpy, root, 0, 0, DisplayWidth(dpy, screen), bar_height, 0, barbg, barbg);
 	XClassHint barhint = {
 		.res_name = "qdwmbar",
 		.res_class = "qdwmbar"

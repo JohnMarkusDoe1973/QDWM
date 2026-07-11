@@ -1,6 +1,6 @@
 PREFIX ?= /usr/local
 CFLAGS ?= -Os -pedantic -Wall
-LDFLAGS = -lX11
+LDFLAGS = -lX11 -lXcursor
 
 all:
 	$(CC) $(CFLAGS) main.c -o qdwm $(LDFLAGS)

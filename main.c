@@ -3,9 +3,10 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
+#include <X11/cursorfont.h>
+#include <X11/Xcursor/Xcursor.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include <X11/cursorfont.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/select.h>
@@ -309,6 +310,12 @@ void spawn(const char *cmd) {
 	}
 }
 
+static Cursor load_cursor(unsigned int shape) {
+	Cursor cursor = XcursorShapeLoadCursor(dpy, shape);
+	if (cursor == None) cursor = XCreateFontCursor(dpy, shape);
+	return cursor;
+}
+
 int main(void)
 {
 	XWindowAttributes attr;
@@ -317,7 +324,8 @@ int main(void)
 
 	if (!(dpy = XOpenDisplay(NULL)))
 		return 1;
-
+	XcursorSetTheme(dpy, cursor_name);
+	XcursorSetDefaultSize(dpy, cursor_size);	
 	XSetErrorHandler(xerror);
 
 	int screen = DefaultScreen(dpy);
@@ -327,7 +335,14 @@ int main(void)
 	setup_volume_listener();
 	update_volume();
 	bar_unclean = 1;
-	bar = XCreateSimpleWindow(dpy, root, 0, 0, DisplayWidth(dpy, screen), bar_height, 0, barbg, barbg);
+	bar = XCreateSimpleWindow(
+		dpy, root,
+		0, 0,
+		DisplayWidth(dpy, screen), bar_height,
+							  0,
+						   barbg,
+						   barbg
+	);
 	XClassHint barhint = {
 		.res_name = "qdwmbar",
 		.res_class = "qdwmbar"
@@ -390,9 +405,9 @@ int main(void)
 
 	start.subwindow = None;
 
-	Cursor normal = XCreateFontCursor(dpy, XC_left_ptr);
-	Cursor move   = XCreateFontCursor(dpy, XC_fleur);
-	Cursor resize = XCreateFontCursor(dpy, XC_sizing);
+	Cursor normal = load_cursor(XC_left_ptr);
+	Cursor move   = load_cursor(XC_fleur);
+	Cursor resize = load_cursor(XC_sizing);
 	XDefineCursor(dpy, DefaultRootWindow(dpy), normal);
 
 

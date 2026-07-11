@@ -12,6 +12,7 @@ It manages windows, tiles them, draws a bar, handles a few keybinds, and stays o
 - Tiling and floating modes
 - 5 workspaces
 - Scratchpad terminal
+- Configurable Xcursor theme and size
 - Simple status bar
 - Volume display
 - mpv song display
@@ -27,6 +28,7 @@ Run it in Xephyr before using it as your actual window manager.
 ## Dependencies
 
 - Xlib
+- libXcursor
 - a C compiler
 - `pactl` for volume status
 - `mpv` and `socat` for media display/control
@@ -53,6 +55,8 @@ exec qdwm in .xinitrc
 static const char *termcmd   = "st";
 static const char *launchcmd = "dmenu_run";
 static const char *scratchpadcommand = "st -c scratchpad -e nano /tmp/scratchpad.txt";
+static const char *cursor_theme = "Adwaita";
+static const int cursor_size = 24;
 static const int gap = 10;
 static const unsigned int gridsize = 2;
 static const unsigned int modkey = Mod1Mask;
@@ -66,4 +70,9 @@ static const unsigned long barfg = 0xf7eef8;
 static const int bar_height = 20;
 ```
 
+The cursor theme must be installed in a standard Xcursor location, such as:
+
+```~/.local/share/icons/Win3D-Cyan/```
+
+That directory should contain a cursors subdirectory.
 ## Please don't use it if you value your sanity.
